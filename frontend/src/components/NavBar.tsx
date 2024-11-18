@@ -1,14 +1,17 @@
-import useAuth from "../hooks/useAuth"
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../redux/store";
+// import { useAuth, useAuthUser } from "../hooks/useAuth"
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../redux/store";
 import { logout } from "../redux/authSlice";
 import { NavLink } from "react-router-dom";
 import logo from "../assets/logo.png"
 
 
 const NavBar = () => {
-  const isAuthenticated = useAuth();
-  const dispatch = useDispatch<AppDispatch>();
+  const { loading, userInfo, error, success } : {loading: boolean; userInfo:any;error: any;success:boolean} = useSelector((state: RootState) => state.auth)
+  const dispatch = useDispatch<AppDispatch>()
+  const user = userInfo ? userInfo.user : null
+  
+  console.log(loading, userInfo, error, success)
 
   return (
     <nav className="bg-white dark:bg-gray-900 sticky w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
@@ -23,7 +26,7 @@ const NavBar = () => {
           </span>
         </NavLink>
         <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-          { isAuthenticated ? (<NavLink to='/'>
+          { userInfo ? (<NavLink to='/'>
           <button
             type="button"
             className="btn-primary"

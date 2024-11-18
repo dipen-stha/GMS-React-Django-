@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux"
 import { Link } from "react-router-dom"
 import { AppDispatch } from "../redux/store"
 import { useNavigate } from "react-router-dom"
-import { login } from "../redux/authService"
+import { login } from "../redux/authActions"
 
 
 const Login = () => {

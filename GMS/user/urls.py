@@ -4,5 +4,5 @@ from . views import SignUpView, UserView
 
 router = DefaultRouter()
 router.register(r'signup', SignUpView, basename='signup')
-router.register(r'user', UserView, basename='user')
+router.register(r'get_user', UserView, basename='get_user')
 urlpatterns = router.urls

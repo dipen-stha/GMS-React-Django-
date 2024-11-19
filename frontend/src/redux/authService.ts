@@ -1,11 +1,11 @@
 
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-interface AuthState{
+type AuthState = {
     access: string | null
 }
 
-interface UserDetails {
+type UserDetails = {
     id: string;
     username: string;
     email: string;
@@ -13,9 +13,10 @@ interface UserDetails {
 
 export const authApi = createApi({
   reducerPath: 'authApi',
-  baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.BASE_URL,
+  baseQuery: fetchBaseQuery({ 
+    baseUrl: import.meta.env.VITE_API_URL,
     prepareHeaders: (headers, { getState } ) => {
-        const token = (getState() as {auth: AuthState}).auth.access;
+        const token = (getState() as {auth: AuthState}).auth.access
         if(token) {
             headers.set('Authorization', `Bearer ${token}`)
         }
@@ -23,9 +24,9 @@ export const authApi = createApi({
     }
    }),
   endpoints: (builder) => ({
-    getUserDetails: builder.query<UserDetails, void>({
-      query: () => ({
-        url: 'api/get_user/',
+    getUserDetails: builder.query<UserDetails, string>({
+      query: (userId) => ({
+        url: `/get_user/${userId}`,
         method: 'GET',
       })}),
     }),

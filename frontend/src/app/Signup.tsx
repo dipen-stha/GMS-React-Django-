@@ -6,26 +6,36 @@ import { signup } from "../redux/authActions"
 
 const Signup = () => {
   
-  const [fname, setFname] = useState('')
-  const [lname, setLname] = useState('')
+  const [first_name, setFname] = useState('')
+  const [last_name, setLname] = useState('')
   const [email, setEmail] = useState('')
-  const [password1, setPassword1] = useState('')
+  const [password, setPassword] = useState('')
   const [password2, setPassword2] = useState('')
   const [username, setUsername] = useState('')
-  const [gender, setGender] = useState('')
+  const [gender, setGender] = useState<string>('MALE')
+  const [profile_pic, setPicture] = useState<File | null>()
+
 
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
 
+  const handleFileChange = (e: any) => {
+    console.log(e.target.files[0])
+    setPicture(e.target.files[0])
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    try {
-      const data = { fname, lname, email, username, password1, password2, gender }
-      console.log(data)
-      dispatch(signup(data))
-      navigate('/login')
-    } catch (error) {
-      console.error('Sign up failed')
+    if(password == password2){
+      try {
+        const data = { first_name, last_name, email, username, password, gender, profile_pic }
+        dispatch(signup(data))
+        // navigate('/login')
+      } catch (error) {
+        console.error('Sign up failed')
+      }
+    } else {
+      alert("Passwords don't match")
     }
   }
 
@@ -39,10 +49,10 @@ const Signup = () => {
             <tbody>
             <tr>
               <td className="pr-2 py-2">
-                <input type="text" placeholder="First Name" className="input-field w-full" value={fname} onChange={(e) => setFname(e.target.value)} />
+                <input type="text" placeholder="First Name" className="input-field w-full" value={first_name} onChange={(e) => setFname(e.target.value)} />
               </td>
               <td className="py-2">
-              <input type="text" placeholder="Last Name" className="input-field w-full" value={lname} onChange={(e) => setLname(e.target.value)} />
+              <input type="text" placeholder="Last Name" className="input-field w-full" value={last_name} onChange={(e) => setLname(e.target.value)} />
               </td>
             </tr>
             <tr>
@@ -57,7 +67,7 @@ const Signup = () => {
             </tr>
             <tr>
             <td className="pr-2 py-2">
-                <input type="password" placeholder="Password" className="input-field w-full" value={password1} onChange={(e) => setPassword1(e.target.value)} />
+                <input type="password" placeholder="Password" className="input-field w-full" value={password} onChange={(e) => setPassword(e.target.value)} />
               </td>
               <td className="py-2">
               <input type="password" placeholder="Repeat Password" className="input-field w-full" value={password2} onChange={(e) => setPassword2(e.target.value)} />
@@ -67,10 +77,13 @@ const Signup = () => {
               <td className="pr-2 py-2">
                 <select className="input-field w-full" value={gender} onChange={(e) => setGender(e.target.value)}>
                   <option disabled>Select Gender</option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                  <option value="Others">Others</option>
+                  <option value="MALE">Male</option>
+                  <option value="FEMALE">Female</option>
+                  <option value="OTHERS">Others</option>
                 </select>
+              </td>
+              <td>
+                <input type="file" onChange={handleFileChange}></input>
               </td>
             </tr>
             </tbody>

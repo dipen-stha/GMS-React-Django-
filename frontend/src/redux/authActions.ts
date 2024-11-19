@@ -4,10 +4,10 @@ import { createAsyncThunk } from '@reduxjs/toolkit'
 const API_URL = import.meta.env.VITE_API_URL
 const token = localStorage.access
 
-interface LoginResponse{
+type LoginResponse= {
     access: string;
     refresh: string;
-    userInfo: {
+    user: {
         id: string;
         fname: string;
         lname: string;
@@ -43,20 +43,32 @@ export const login = createAsyncThunk<LoginResponse, {username: string; password
 
 export const signup = createAsyncThunk('auth/signup', async(credentials: {
     username: string,
-    password1: string,
-    password2: string,
+    password: string,
     email: string,
-    fname: string, 
-    lname: string,
-    gender: string
+    first_name: string, 
+    last_name: string,
+    gender: string,
+    profile_pic: File | null | undefined;
 }, { rejectWithValue }) => {
+    const formData = new FormData();
+
+    formData.append('username', credentials.username)
+    formData.append('email', credentials.email)
+    formData.append('first_name', credentials.first_name)
+    formData.append('last_name', credentials.last_name)
+    formData.append('gender', credentials.gender)
+    formData.append('password', credentials.password)
+
+    if(credentials.profile_pic) formData.append('profile_pic', credentials.profile_pic)
     const config = {
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'multipart/form-data'
         },
     }
+    
     try{
-        const response = await axios.post(`${API_URL}/registration/`, credentials, config);
+        console.log(credentials)
+        const response = await axios.post(`${API_URL}/signup/`, formData, config);
         return response.data
     }
     catch(error: any){

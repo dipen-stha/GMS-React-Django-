@@ -1,8 +1,5 @@
-// import { useSelector } from "react-redux";
-// import { AppDispatch, RootState } from "../redux/store";
-// import { useDispatch } from "react-redux";
-// import { useEffect } from "react";
-// import { getUser } from "../redux/authService";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
 
 // export const useAuth = () => {
 //     const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated)
@@ -21,3 +18,15 @@
 
 //     return user
 // }
+
+export const useAuthState = () => {
+    const { loading, user, error, success, isAuthenticated }: {
+      loading: boolean;
+      user: any;
+      error: any;
+      success: boolean;
+      isAuthenticated: boolean;
+    } = useSelector((state: RootState) => state.auth);
+  
+    return { loading, user, error, success, isAuthenticated };
+  };
